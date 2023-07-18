@@ -28,7 +28,7 @@ function getMovies() {
         genreApi,
       ]);
 
-      console.log('genreList', genreApi)
+      console.log('genreList', genreApi);
 
       dispatch({
         type: 'GET_MOVIES_SUCCESS',
@@ -48,9 +48,6 @@ function getMovies() {
 }
 
 
-export const movieItem = (key) => {
-  
-}
 
 export const movieAction = {
   getMovies,

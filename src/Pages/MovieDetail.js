@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
+import { Badge } from 'react-bootstrap';
 
 
 const MovieDetail = () => {
@@ -8,7 +11,8 @@ const MovieDetail = () => {
   console.log(id);
   const {popularMovies, topRatedMovies, upComingMovies, genreList} = useSelector((state) => state.movie);
   const [movieData, setMovieData] = useState(null);
-
+  
+  console.log("영화장르는?", genreList)
   console.log("인기영화", popularMovies)
   const popularList = popularMovies.results.map((it) => it);
   console.log("인기영화 배열객체", popularList);
@@ -56,20 +60,52 @@ const MovieDetail = () => {
     )
   } else {
     return (
-      <div
-      className='MovieDetail'
-      style={{
-        backgroundImage:
-          'URL(' +
-          `https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces${movieData.poster_path}` +
-          ')',
-      }}
-      >
-        <div className='detail-item'>
-        <h1>{movieData.title}</h1>
-        <div>{movieData.adult ? "청불" : "청소년 시청 가능"}</div>
-        <div>{movieData.overview}</div>
-        <div>{movieData.release_date}</div>
+      <div className='MovieDetail'> 
+        <div className='detail-contents'>
+          <div
+          className='detail-background'
+          style={{
+            backgroundImage:
+              'URL(' +
+              `https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces${movieData.backdrop_path}` +
+              ')',
+          }}
+          >
+          <div className='detail-item'>
+            <div className='x-icon-box'>
+                <div className='x-icon-background'>
+                  <FontAwesomeIcon className='x-icon' icon={faCircleXmark}/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <div className='detail-info'>
+
+          <div className='detail-left'>
+
+          <div className='detail-title'>
+              <h1>{movieData.title}</h1>
+          </div>
+
+          <div className='detail-date'>
+            <h2>{movieData.release_date}</h2>
+          </div>
+
+          <div className='detail-desc'>
+            <h4>{movieData.overview}</h4>
+          </div>
+          </div>
+
+          <div className='detail-genre detail-right'>
+              {movieData.genre_ids.map((it) => (
+                <Badge bg='danger'>
+                  {genreList.find((genreItem) => it === genreItem.id).name}
+                </Badge>
+              ))}
+          </div>
+        </div>
+
         </div>
       </div>
     )

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Button from 'react-bootstrap/Button';
 import Container from 'react-bootstrap/Container';
@@ -9,6 +9,14 @@ import { Link } from 'react-router-dom';
 
 
 const Navigation = () => {
+  const [searchState, setSearchState] = useState([]);
+  const onSearchInput = (e) => {
+    setSearchState(e.target.value);
+    console.log(e.target.value)
+  }
+  useEffect(() => {
+    
+  }, [])
   return (
     <Navbar bg='dark' variant='dark'>
     <Container fluid>
@@ -29,6 +37,8 @@ const Navigation = () => {
         </Nav>
         <Form className="d-flex">
           <Form.Control
+            value={searchState}
+            onChange={onSearchInput}
             type="search"
             placeholder="Search"
             className="me-2"
