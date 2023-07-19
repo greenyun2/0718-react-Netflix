@@ -3,7 +3,8 @@ let initialState = {
   topRatedMovies: {},
   upComingMovies: {},
   loading: true,
-  genreList: [],
+  keyword: '',
+  keywordList: [],
 };
 
 function movieReducer(state = initialState, action) {
@@ -28,10 +29,20 @@ function movieReducer(state = initialState, action) {
           ...state,
           loading: false,
         }
-        
+      case 'SEARCH_BY_KEYWORD':
+        return {
+          ...state,
+          keyword: payload.keyword,
+        }
+      case 'ADD_SEARCH_KEYWORD':
+        return {
+          ...state,
+          keywordList: [...state.keyword]
+        }
     default:
       return { ...state };
   }
 }
+
 
 export default movieReducer;

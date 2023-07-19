@@ -1,61 +1,30 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCircleXmark } from '@fortawesome/free-regular-svg-icons';
 import { Badge } from 'react-bootstrap';
+import { ClipLoader } from "react-spinners";
 
 
 const MovieDetail = () => {
+  const location = useLocation();
+  const movieItem = location.state.item;
+
   const { id } = useParams();
   console.log(id);
-  const {popularMovies, topRatedMovies, upComingMovies, genreList} = useSelector((state) => state.movie);
-  const [movieData, setMovieData] = useState(null);
-  
-  console.log("영화장르는?", genreList)
-  console.log("인기영화", popularMovies)
-  const popularList = popularMovies.results.map((it) => it);
-  console.log("인기영화 배열객체", popularList);
-  const topRatedList = topRatedMovies.results.map((it) => it);
-  const upComingList = upComingMovies.results.map((it) => it);
-  const allMovieContent = popularList.concat(topRatedList, upComingList);
-  console.log("영화 콘텐츠", allMovieContent );
-  // console.log("인기영화", popularMovies);
-  // console.log("탑레이티드", topRatedMovies);
-  // console.log("업커밍?", upComingMovies);
-  // console.log("장르?",  genreList);
-  // const popular = popularMovies.results.map((it) => it.id);
-  // console.log("인기아이디값만 추출", popular);
-  // const topRated = topRatedMovies.results.map((it) => it.id);
-  // console.log("탑아이디값만 추출", topRated);
-  // const upComing = upComingMovies.results.map((it) => it.id);
-  // console.log("업아이디값만 추출", upComing);
-  
-  // const moviesId = popular.concat(topRated, upComing);
-  // console.log("영화의 아이디값", moviesId);
-  // const movieData = moviesId.find((it) => it.id === id);
-  // console.log("영화데이터", movieData)
+  const navigate = useNavigate()
+  const {genreList, loading} = useSelector((state) => state.movie);
 
-  // const onMatchingData = (movieId) => {
-  //   const popular = popularMovies.results.map((it) => it.id);
-  //   const topRated = topRatedMovies.results.map((it) => it.id);
-  //   const upComing = upComingMovies.results.map((it) => it.id);
-  //   const allMoviesId = popular.concat(topRated, upComing);
-    
-  //   if(allMoviesId.includes(movieId)) {
-  //     return setCheckMoviesId(true)
-  //   }
-  // }
-
-  useEffect(() => {
-    const movie = allMovieContent.find((it) => it.id === Number(id));
-    setMovieData(movie)
-  }, [id, allMovieContent])
-
-  if(!movieData) {
+  if(loading) {
     return (
-      <div className='MovieDetail'>
-        <div>Loading...</div>
+      <div>
+        <ClipLoader
+          className='loader'
+          color="#f00"
+          loading={loading}
+          size={150}
+        />
       </div>
     )
   } else {
@@ -67,12 +36,14 @@ const MovieDetail = () => {
           style={{
             backgroundImage:
               'URL(' +
-              `https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces${movieData.backdrop_path}` +
+              `https://www.themoviedb.org/t/p/w1920_and_h800_multi_faces${movieItem.backdrop_path}` +
               ')',
           }}
           >
           <div className='detail-item'>
-            <div className='x-icon-box'>
+            <div 
+            onClick={() => navigate(-1)}
+            className='x-icon-box'>
                 <div className='x-icon-background'>
                   <FontAwesomeIcon className='x-icon' icon={faCircleXmark}/>
                 </div>
@@ -85,20 +56,20 @@ const MovieDetail = () => {
           <div className='detail-left'>
 
           <div className='detail-title'>
-              <h1>{movieData.title}</h1>
+            <h1>{movieItem.title}</h1>
           </div>
 
           <div className='detail-date'>
-            <h2>{movieData.release_date}</h2>
+            <h2>{movieItem.release_date}</h2>
           </div>
 
           <div className='detail-desc'>
-            <h4>{movieData.overview}</h4>
+            <h4>{movieItem.overview}</h4>
           </div>
           </div>
 
           <div className='detail-genre detail-right'>
-              {movieData.genre_ids.map((it) => (
+              {movieItem.genre_ids.map((it) => (
                 <Badge bg='danger'>
                   {genreList.find((genreItem) => it === genreItem.id).name}
                 </Badge>

@@ -48,7 +48,6 @@ function getMovies() {
 }
 
 
-
 export const movieAction = {
-  getMovies,
+  getMovies
 };

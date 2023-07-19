@@ -110,6 +110,7 @@
 .detail-item .x-icon-box {
   display: flex;
   justify-content: end;
+  cursor: pointer;
 }
 .x-icon-box .x-icon {
   font-size: 36px;
